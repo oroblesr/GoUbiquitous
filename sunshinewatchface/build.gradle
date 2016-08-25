@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.oroblesr.sunshine"
+        applicationId "com.oroblesr.sunshinewatchface"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1

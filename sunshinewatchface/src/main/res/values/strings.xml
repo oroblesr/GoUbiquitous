@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name" translatable="false">SunshineWatchFace</string>
+    <string name="watch_face_label" translatable="false">Sunshine</string>
+</resources>
