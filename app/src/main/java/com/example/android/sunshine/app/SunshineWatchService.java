@@ -47,8 +47,6 @@ public class SunshineWatchService extends IntentService
 
         if (intent != null && intent.getAction() != null && intent.getAction().equals(UPDATE)) {
 
-            Log.e("SunPhone", "-----On Intent-----");
-
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -57,16 +55,13 @@ public class SunshineWatchService extends IntentService
 
 
             mGoogleApiClient.connect();
-
         }
-
 
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(SunshineWearCommon.PATH);
-        // TODO put relevant data
 
         String locationQuery = Utility.getPreferredLocation(this);
         Uri weatherUri = WeatherContract.WeatherEntry
@@ -94,8 +89,6 @@ public class SunshineWatchService extends IntentService
             String highString = Utility.formatTemperature(this, high);
             String lowString = Utility.formatTemperature(this, low);
 
-            Log.e("SunPhone", "-----Successfully connected to emulator-----");
-
             putDataMapRequest.getDataMap()
                     .putInt(SunshineWearCommon.KEY_ID, weatherId);
             putDataMapRequest.getDataMap()
@@ -103,9 +96,11 @@ public class SunshineWatchService extends IntentService
             putDataMapRequest.getDataMap()
                     .putString(SunshineWearCommon.KEY_HIGH, lowString);
 
+            putDataMapRequest.getDataMap()
+                    .putInt("value", (int) System.currentTimeMillis());
 
             PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-            Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
+            Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest.setUrgent());
 
 
             data.close();
@@ -114,21 +109,20 @@ public class SunshineWatchService extends IntentService
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e("SunPhone", "-----On onConnectionSuspended-----");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e("SunPhone", "-----On onConnectionFailed-----");
     }
 
-/*
-// TODO Fix onDestroy
+
     @Override
     public void onDestroy() {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
         super.onDestroy();
-        Log.e("SunPhone", "-----On onDestroy-----");
-        mGoogleApiClient.disconnect();
+
     }
-*/
+
 }

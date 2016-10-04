@@ -1,4 +1,4 @@
-package com.oroblesr.sunshinewatchface;
+package com.example.android.sunshine.app;
 
 import static android.graphics.Color.parseColor;
 

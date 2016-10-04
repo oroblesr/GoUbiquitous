@@ -363,6 +363,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private void updateWatchFace() {
         Context context = getContext();
         Intent intent = new Intent(context, SunshineWatchService.class);
+        intent.setAction(SunshineWatchService.UPDATE);
         context.startService(intent);
 
     }

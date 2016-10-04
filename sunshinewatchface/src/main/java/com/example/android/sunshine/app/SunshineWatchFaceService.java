@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.oroblesr.sunshinewatchface;
+package com.example.android.sunshine.app;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -113,7 +113,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
     }
 
     private class Engine extends CanvasWatchFaceService.Engine implements
-            GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+            GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener {
         final Handler mUpdateTimeHandler = new EngineHandler(this);
         boolean mRegisteredTimeZoneReceiver = false;
         Paint mBackgroundPaint;
@@ -249,6 +249,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
 
         private void releaseApi() {
             if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                //Wearable.DataApi.removeListener(mGoogleApiClient, onDataChangedListener);
                 mGoogleApiClient.disconnect();
             }
         }
@@ -427,42 +428,26 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
 
         @Override
         public void onConnected(@Nullable Bundle bundle) {
-            Log.e("SunWear", "-----------------Successful onConnected  ");
-            Wearable.DataApi.addListener(mGoogleApiClient, onDataChangedListener);
+            Wearable.DataApi.addListener(mGoogleApiClient, Engine.this);
             Wearable.DataApi.getDataItems(mGoogleApiClient).setResultCallback(onConnectedResultCallback);
 
         }
 
         @Override
         public void onConnectionSuspended(int i) {
-            Log.e("SunWear", "-----------------Successful onConnectionSuspended" );
 
         }
 
         @Override
         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-            Log.e("SunWear", "---------------onConnectionFailed");
 
         }
 
 
-        private final DataApi.DataListener onDataChangedListener = new DataApi.DataListener() {
-            @Override
-            public void onDataChanged(DataEventBuffer dataEvents) {
-                for (DataEvent event : dataEvents) {
-                    if (event.getType() == DataEvent.TYPE_CHANGED) {
-                        DataItem item = event.getDataItem();
-                        processConfigurationFor(item);
-                    }
-                }
-                dataEvents.release();
-                invalidateIfNecessary();
-            }
-        };
 
         private final ResultCallback<DataItemBuffer> onConnectedResultCallback = new ResultCallback<DataItemBuffer>() {
             @Override
-            public void onResult(DataItemBuffer dataItems) {
+            public void onResult(@NonNull DataItemBuffer dataItems) {
                 for (DataItem item : dataItems) {
                     processConfigurationFor(item);
                 }
@@ -476,14 +461,10 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             if (SunshineWearCommon.PATH.equals(item.getUri().getPath())) {
                 DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                 if (dataMap.containsKey(SunshineWearCommon.KEY_ID)) {
-                    // TODO get correct data
                     weatherId = dataMap.getInt(SunshineWearCommon.KEY_ID);
                     lowTemp = dataMap.getString(SunshineWearCommon.KEY_LOW);
                     highTemp = dataMap.getString(SunshineWearCommon.KEY_HIGH);
 
-                    Log.e("SunWear", "Successful id: "
-                            + weatherId + "\nlow: " + lowTemp
-                            + "\nhigh: " + highTemp);
                 }
 
             }
@@ -496,5 +477,18 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         }
 
 
+        @Override
+        public void onDataChanged(DataEventBuffer dataEventBuffer) {
+
+            for (DataEvent event : dataEventBuffer) {
+                if (event.getType() == DataEvent.TYPE_CHANGED) {
+                    DataItem item = event.getDataItem();
+                    processConfigurationFor(item);
+                }
+            }
+            dataEventBuffer.release();
+            invalidateIfNecessary();
+
+        }
     }
 }
