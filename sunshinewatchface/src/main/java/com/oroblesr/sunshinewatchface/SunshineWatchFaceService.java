@@ -145,6 +145,10 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
 
         private GoogleApiClient mGoogleApiClient;
 
+        int weatherId;
+        String lowTemp;
+        String highTemp;
+
         /*
         int mInteractiveBackgroundColor =
                 SunshineWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_BACKGROUND;
@@ -473,7 +477,13 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                 DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                 if (dataMap.containsKey(SunshineWearCommon.KEY_ID)) {
                     // TODO get correct data
-                    Log.e("SunWear", "Successful com: " + dataMap.getString(SunshineWearCommon.KEY_ID));
+                    weatherId = dataMap.getInt(SunshineWearCommon.KEY_ID);
+                    lowTemp = dataMap.getString(SunshineWearCommon.KEY_LOW);
+                    highTemp = dataMap.getString(SunshineWearCommon.KEY_HIGH);
+
+                    Log.e("SunWear", "Successful id: "
+                            + weatherId + "\nlow: " + lowTemp
+                            + "\nhigh: " + highTemp);
                 }
 
             }
