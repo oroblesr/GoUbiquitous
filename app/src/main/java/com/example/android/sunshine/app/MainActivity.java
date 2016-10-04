@@ -107,6 +107,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
+        // TODO Move to the right location
+        Intent intent = new Intent(this, SunshineWatchService.class);
+        intent.setAction(SunshineWatchService.UPDATE);
+        startService(intent);
     }
 
     @Override

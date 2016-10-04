@@ -180,6 +180,13 @@
         <service
             android:name=".gcm.RegistrationIntentService"
             android:exported="false"></service>
+
+        <service
+            android:name=".SunshineWatchService"
+            android:exported="false">
+        </service>
+
+
     </application>
 
 </manifest>
