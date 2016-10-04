@@ -120,6 +120,10 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         private Bitmap mWeatherBitmap;
         Paint mDatePaint;
         Paint mTextPaint;
+        Paint mHighTempPaint;
+        Paint mLowTempPaint;
+        Paint mLinePaint;
+        Paint mBitmapPaint;
         boolean mAmbient;
         Time mTime;
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
@@ -186,14 +190,20 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(ContextCompat.getColor(context,R.color.background));
 
-            mWeatherBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.art_clear);
+            mWeatherBitmap = BitmapFactory.decodeResource(getResources(),
+                    SunshineWatchFaceUtil.getResourceForWeatherId(weatherId));
 
-            mDatePaint = new Paint();
-            mDatePaint = createTextPaint(ContextCompat.getColor(context,R.color.digital_text));
 
-            mTextPaint = new Paint();
-            mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            mTextPaint = createTextPaint(ContextCompat.getColor(context,R.color.digital_text));
+            mDatePaint = createTextPaint(ContextCompat.getColor(context,R.color.date_text));
+            mHighTempPaint = createTextPaint(ContextCompat.getColor(context,R.color.high_temp_text));
+            mLowTempPaint = createTextPaint(ContextCompat.getColor(context,R.color.low_temp_text));
 
+            mBitmapPaint = new Paint();
+            mBitmapPaint.setAntiAlias(true);
+
+            mLinePaint = new Paint();
+            mLinePaint.setColor(ContextCompat.getColor(context,R.color.line_color));
 
             mTime = new Time();
 
@@ -279,11 +289,20 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             boolean isRound = insets.isRound();
             mXOffset = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
+
             float textSize = resources.getDimension(isRound
                     ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
+            float dateTextSize = resources.getDimension(isRound
+                    ? R.dimen.date_text_size_round : R.dimen.date_text_size);
+            float highTempTextSize = resources.getDimension(isRound
+                    ? R.dimen.high_temp_text_size_round : R.dimen.high_temp_text_size);
+            float lowTempTextSize = resources.getDimension(isRound
+                    ? R.dimen.low_temp_text_size_round : R.dimen.low_temp_text_size_round);
 
             mTextPaint.setTextSize(textSize);
-            mDatePaint.setTextSize(textSize);
+            mDatePaint.setTextSize(dateTextSize);
+            mHighTempPaint.setTextSize(highTempTextSize);
+            mLowTempPaint.setTextSize(lowTempTextSize);
         }
 
         @Override
@@ -306,6 +325,11 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                 if (mLowBitAmbient) {
                     mTextPaint.setAntiAlias(!inAmbientMode);
                     mDatePaint.setAntiAlias(!inAmbientMode);
+                    mHighTempPaint.setAntiAlias(!inAmbientMode);
+                    mLowTempPaint.setAntiAlias(!inAmbientMode);
+                    mLinePaint.setAntiAlias(!inAmbientMode);
+                    mBitmapPaint.setAntiAlias(!inAmbientMode);
+
                 }
                 invalidate();
             }
@@ -357,12 +381,17 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             String text = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
+
             canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
 
 
             // Only render the day of week and date if there is no peek card, so they do not bleed
             // into each other in ambient mode.
             if (getPeekCardPosition().isEmpty()) {
+
+                String high = highTemp == null ? "" : highTemp + "\u00b0";
+                String low = lowTemp == null ? "" : lowTemp + "\u00b0";
+
                 // Day of week
                 canvas.drawText(
                         mDayOfWeekFormat.format(mDate),
@@ -371,18 +400,25 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                 canvas.drawText(
                         mDateFormat.format(mDate),
                         mXOffset, mYOffset + mLineHeight * 2, mDatePaint);
-                // Temp
-                /*
-                canvas.drawText(
-                        mDateFormat.format(mDate),
-                        mXOffset, mYOffset + mLineHeight * 2, mDatePaint);
-*/
+
+
+                canvas.drawLine(mXOffset, mYOffset, mXOffset * 3, mYOffset * 3,
+                        mLinePaint);
 
                 // Weather Art
                 canvas.drawBitmap(createScaledBitmap(mWeatherBitmap, 40, 40, true),
                         mXOffset,
                         mYOffset + mLineHeight * 3,
-                        new Paint());
+                        mBitmapPaint);
+
+                // High Temp
+                canvas.drawText(high, mXOffset * 2, mYOffset + mLineHeight * 3, mHighTempPaint);
+
+                // High Temp
+                canvas.drawText(low, mXOffset * 3, mYOffset + mLineHeight * 3, mLowTempPaint);
+
+
+
             }
 
         }

@@ -9,7 +9,7 @@ import static android.graphics.Color.parseColor;
 
 public class SunshineWatchFaceUtil {
 
-    public int getResourceForWeatherId(int weatherId) {
+    public static int getResourceForWeatherId(int weatherId) {
         final int CLEAR = 0;
         final int CLOUDS = 1;
         final int FOG = 2;
@@ -44,8 +44,7 @@ public class SunshineWatchFaceUtil {
             case RAIN: resId = R.drawable.art_rain; break;
             case SNOW: resId = R.drawable.art_snow; break;
             case STORM: resId = R.drawable.art_storm; break;
-            //TODO add error resource
-            default: resId = -1;
+            default: resId = R.drawable.cloud_outline_off;
         }
 
         return resId;
