@@ -385,7 +385,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                 String high = highTemp == null ? "" : highTemp;
                 String low = lowTemp == null ? "" : lowTemp;
 
-                String date = mDayOfWeekFormat.format(mDate) + " " + mDateFormat.format(mDate);
+                String date = mDayOfWeekFormat.format(mDate) + ", " + mDateFormat.format(mDate);
                 // Date
                 canvas.drawText(date, widthCenter - mDatePaint.measureText(date)/2,
                         heightCenter, mDatePaint);
