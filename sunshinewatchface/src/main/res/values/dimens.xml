@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="digital_text_size">40dp</dimen>
-    <dimen name="digital_text_size_round">45dp</dimen>
-    <dimen name="date_text_size">40dp</dimen>
-    <dimen name="date_text_size_round">45dp</dimen>
-    <dimen name="high_temp_text_size">40dp</dimen>
-    <dimen name="high_temp_text_size_round">45dp</dimen>
-    <dimen name="low_temp_text_size">40dp</dimen>
-    <dimen name="low_temp_text_size_round">45dp</dimen>
+    <dimen name="digital_text_size">35dp</dimen>
+    <dimen name="digital_text_size_round">40dp</dimen>
+    <dimen name="date_text_size">15dp</dimen>
+    <dimen name="date_text_size_round">20dp</dimen>
+    <dimen name="high_temp_text_size">15dp</dimen>
+    <dimen name="high_temp_text_size_round">20dp</dimen>
+    <dimen name="low_temp_text_size">15dp</dimen>
+    <dimen name="low_temp_text_size_round">20dp</dimen>
     <dimen name="digital_x_offset">15dp</dimen>
     <dimen name="digital_x_offset_round">25dp</dimen>
     <dimen name="digital_y_offset">90dp</dimen>
     <dimen name="digital_line_height">25dp</dimen>
+    <dimen name="line_thickness">2dp</dimen>
+    <dimen name="bitmap_size">50dp</dimen>
 </resources>

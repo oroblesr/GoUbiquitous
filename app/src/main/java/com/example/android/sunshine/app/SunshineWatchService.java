@@ -92,9 +92,9 @@ public class SunshineWatchService extends IntentService
             putDataMapRequest.getDataMap()
                     .putInt(SunshineWearCommon.KEY_ID, weatherId);
             putDataMapRequest.getDataMap()
-                    .putString(SunshineWearCommon.KEY_LOW, highString);
+                    .putString(SunshineWearCommon.KEY_LOW, lowString);
             putDataMapRequest.getDataMap()
-                    .putString(SunshineWearCommon.KEY_HIGH, lowString);
+                    .putString(SunshineWearCommon.KEY_HIGH, highString);
 
             putDataMapRequest.getDataMap()
                     .putInt("value", (int) System.currentTimeMillis());

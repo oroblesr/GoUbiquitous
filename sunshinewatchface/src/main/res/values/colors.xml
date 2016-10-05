@@ -6,9 +6,9 @@
     <color name="background2">#000088</color>
     <color name="digital_text">#ffffff</color>
 
-    <color name="date_text">#ffffff</color>
+    <color name="date_text">#E1F5FE</color>
     <color name="high_temp_text">#ffffff</color>
-    <color name="low_temp_text">#ffffff</color>
+    <color name="low_temp_text">#E1F5FE</color>
 
     <color name="line_color">#ffffff</color>
 </resources>
